@@ -89,7 +89,7 @@ TEST(AccountServiceShould, accept_a_withdrawal) {
 
     auto accountService = new AccountService(transactionRepository, myClock);
 
-    accountService->deposit(500);
+    accountService->withdraw(500);
 
     delete myClock;
     delete accountService;
