@@ -50,13 +50,12 @@ TEST(AccountServiceShould, accept_a_deposit)
     auto myClock = new ClockMock;
     ON_CALL(*myClock, todayAsString()).WillByDefault(Return("01/09/2019"));
 
+    auto transactionRepository = new TransactionRepositoryMock;
+    EXPECT_CALL(*transactionRepository, add(transaction("01/09/2019", 1000))).Times(1);
+
     auto accountService = new AccountService;
 
     accountService->deposit(1000);
-
-    auto transactionRepository = new TransactionRepositoryMock;
-
-    EXPECT_CALL(*transactionRepository, add(transaction("01/09/2019", 1000))).Times(1);
 
     delete myClock;
     delete accountService;
