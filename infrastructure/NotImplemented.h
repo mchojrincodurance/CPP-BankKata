@@ -9,7 +9,9 @@
 #include <exception>
 
 class NotImplemented : public std::exception {
-
+    const char * what() const noexcept override {
+        return "The method is not implemented yet!";
+    }
 };
 
 
