@@ -1,6 +1,7 @@
 #include <iostream>
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
+#include <forward_list>
 
 #include "AccountService.h"
 
@@ -8,11 +9,20 @@
 #include "mocks/ConsoleMock.h"
 #include "mocks/TransactionRepositoryMock.h"
 #include "model/Transaction.h"
+#include "StatementPrinterMock.h"
 
 using ::testing::Return;
 using ::testing::InSequence;
 using ::testing::Property;
 using ::testing::Eq;
+
+model::Transaction *transaction(const char *date, int amount) {
+    return new model::Transaction(date, amount);
+}
+
+MATCHER_P(IsTransactionEquivalent, originalTransaction, "") {
+    return arg->getDate() == originalTransaction->getDate() && arg->getAmount() == originalTransaction->getAmount();
+}
 
 TEST(PrintStatementFeature, print_statement_containing_all_transactions) {
     auto myClock = new ClockMock;
@@ -42,14 +52,6 @@ TEST(PrintStatementFeature, print_statement_containing_all_transactions) {
     delete myConsole;
     delete accountService;
     delete myTransactionRepository;
-}
-
-model::Transaction *transaction(const char *date, int amount) {
-    return new model::Transaction(date, amount);
-}
-
-MATCHER_P(IsTransactionEquivalent, originalTransaction, "") {
-    return arg->getDate() == originalTransaction->getDate() && arg->getAmount() == originalTransaction->getAmount();
 }
 
 TEST(AccountServiceShould, accept_a_deposit) {
@@ -94,4 +96,31 @@ TEST(AccountServiceShould, accept_a_withdrawal) {
     delete myClock;
     delete accountService;
     delete transactionRepository;
+}
+
+TEST(AccountServiceShould, print_a_statement_containing_all_transactions) {
+    auto transactionRepository = new TransactionRepositoryMock;
+    auto transactionList = new std::forward_list<model::Transaction *>;
+    auto statementPrinter = new StatementPrinterMock;
+
+    transactionList->assign({transaction("22/12/2019", 1000)});
+
+    ON_CALL(
+            *transactionRepository,
+            all()
+    )
+            .WillByDefault(Return(*transactionList));
+
+    Clock *myClock = new Clock;
+
+    auto accountService = new AccountService(transactionRepository, myClock);
+
+    EXPECT_CALL(*statementPrinter, print(Eq(transactionList)));
+
+    accountService->printStatement();
+
+    delete accountService;
+    delete transactionRepository;
+    delete myClock;
+    delete statementPrinter;
 }

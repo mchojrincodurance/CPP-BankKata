@@ -19,7 +19,13 @@ add_executable(BankKata main.cpp
         mocks/TransactionRepositoryMock.cc
         mocks/TransactionRepositoryMock.h
         model/Transaction.cc
-        model/Transaction.h)
+        model/Transaction.h
+        StatementPrinterMock.cc
+        StatementPrinterMock.h
+        StatementPrinter.cc
+        StatementPrinter.h
+        infrastructure/NotImplemented.cc
+        infrastructure/NotImplemented.h)
 
 include(FetchContent)
 FetchContent_Declare(
