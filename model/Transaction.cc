@@ -4,8 +4,15 @@
 
 #include "Transaction.h"
 
-namespace model {
-    Transaction::Transaction(const std::string& date, int amount) {
+model::Transaction::Transaction(const std::string& date, int amount) {
+    this->date = date;
+    this->amount = amount;
+}
 
-    }
-} // model
+std::string model::Transaction::getDate() const {
+    return date;
+}
+
+int model::Transaction::getAmount() const {
+    return this->amount;
+}

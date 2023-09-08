@@ -9,7 +9,7 @@
 class TransactionRepository {
 public:
     virtual ~TransactionRepository();
-    virtual void add(model::Transaction * transaction);
+    virtual void add(const model::Transaction *transaction);
 };
 
 

@@ -3,17 +3,22 @@
 //
 
 #ifndef BANKKATA_TRANSACTION_H
-#define BANKKATA_TRANSACTION_H
-
 #include <string>
 
 namespace model {
+#define BANKKATA_TRANSACTION_H
 
     class Transaction {
+    private:
+        std::string date;
+        int amount;
+
     public:
         Transaction(const std::string& date, int amount);
-    };
+        [[nodiscard]] std::string getDate() const;
 
-} // model
+        [[nodiscard]] int getAmount() const;
+    };
+}
 
 #endif //BANKKATA_TRANSACTION_H
