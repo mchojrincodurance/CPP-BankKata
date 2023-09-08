@@ -12,7 +12,7 @@ namespace infrastructure {
     class Console {
     public:
         virtual ~Console();
-        virtual void printLine(std::string message);
+        virtual void printLine(const std::string message) const;
     };
 
 } // infrastructure

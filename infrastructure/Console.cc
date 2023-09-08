@@ -3,13 +3,12 @@
 //
 
 #include "Console.h"
+#include "NotImplemented.h"
 
 namespace infrastructure {
-    Console::~Console() {
+    Console::~Console() = default;
 
-    }
-
-    void Console::printLine(std::string message) {
-
+    void Console::printLine(const std::string message) const {
+        throw NotImplemented();
     }
 } // infrastructure

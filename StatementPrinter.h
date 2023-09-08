@@ -7,11 +7,19 @@
 
 #include <forward_list>
 #include "model/Transaction.h"
-
+#include "infrastructure/Console.h"
 
 class StatementPrinter {
+private:
+    const infrastructure::Console *console;
+
+    [[nodiscard]] std::string buildHeader() const;
+
 public:
+    explicit StatementPrinter(const infrastructure::Console * console);
+
     virtual ~StatementPrinter();
+
     virtual void print(const std::forward_list<model::Transaction *> &transactions);
 };
 

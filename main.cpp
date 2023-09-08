@@ -101,7 +101,9 @@ TEST(AccountServiceShould, accept_a_withdrawal) {
 TEST(AccountServiceShould, print_a_statement_containing_all_transactions) {
     auto transactionRepository = new TransactionRepositoryMock;
     auto transactionList = new std::forward_list<model::Transaction *>;
-    auto statementPrinter = new StatementPrinterMock;
+    auto myConsole = new infrastructure::Console;
+
+    auto statementPrinter = new StatementPrinterMock(myConsole);
 
     transactionList->assign({transaction("22/12/2019", 1000)});
 
@@ -126,8 +128,8 @@ TEST(AccountServiceShould, print_a_statement_containing_all_transactions) {
 }
 
 TEST(StatementPrinterShould, always_print_the_header) {
-    auto statementPrinter = new StatementPrinter;
     auto console = new ConsoleMock;
+    auto statementPrinter = new StatementPrinter(console);
     auto emptyTransactionList = new std::forward_list<model::Transaction *>;
 
     EXPECT_CALL(*console, printLine(Eq("DATE | AMOUNT | BALANCE")));

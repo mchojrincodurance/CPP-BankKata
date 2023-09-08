@@ -3,12 +3,17 @@
 //
 
 #include "StatementPrinter.h"
-#include "infrastructure/NotImplemented.h"
 
 void StatementPrinter::print(const std::forward_list<model::Transaction *> &transactions) {
-    throw NotImplemented();
+    this->console->printLine(this->buildHeader());
 }
 
-StatementPrinter::~StatementPrinter() {
+StatementPrinter::~StatementPrinter() = default;
 
+std::string StatementPrinter::buildHeader() const {
+    return "DATE | AMOUNT | BALANCE";
+}
+
+StatementPrinter::StatementPrinter(const infrastructure::Console * console) {
+    this->console = console;
 }

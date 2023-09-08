@@ -11,7 +11,7 @@ using namespace infrastructure;
 
 class [[maybe_unused]] ConsoleMock : public Console {
 public:
-    MOCK_METHOD(void, printLine, (std::string message), (override));
+    MOCK_METHOD(void, printLine, (const std::string message), (const, override));
 };
 
 
