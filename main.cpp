@@ -124,3 +124,17 @@ TEST(AccountServiceShould, print_a_statement_containing_all_transactions) {
     delete myClock;
     delete statementPrinter;
 }
+
+TEST(StatementPrinterShould, always_print_the_header) {
+    auto statementPrinter = new StatementPrinter;
+    auto console = new ConsoleMock;
+    auto emptyTransactionList = new std::forward_list<model::Transaction *>;
+
+    EXPECT_CALL(*console, printLine(Eq("DATE | AMOUNT | BALANCE")));
+
+    statementPrinter->print(*emptyTransactionList);
+
+    delete statementPrinter;
+    delete console;
+    delete emptyTransactionList;
+}
