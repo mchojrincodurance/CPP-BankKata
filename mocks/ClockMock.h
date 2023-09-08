@@ -2,16 +2,16 @@
 // Created by mauro on 8/09/23.
 //
 
-#ifndef BANKKATA_MOCKCLOCK_H
-#define BANKKATA_MOCKCLOCK_H
+#ifndef BANKKATA_CLOCKMOCK_H
+#define BANKKATA_CLOCKMOCK_H
 
 #include "../infrastructure/Clock.h"
 #include <gmock/gmock.h>
 
-class MockClock : public infrastructure::Clock {
+class ClockMock : public infrastructure::Clock {
 public:
     MOCK_METHOD(std::string, todayAsString, (), (override));
 };
 
 
-#endif //BANKKATA_MOCKCLOCK_H
+#endif //BANKKATA_CLOCKMOCK_H
