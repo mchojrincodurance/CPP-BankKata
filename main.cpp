@@ -1,23 +1,26 @@
 #include <iostream>
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-#include "mocks/MockClock.h"
-#include "mocks/MockConsole.h"
+
 #include "AccountService.h"
+
+#include "mocks/ClockMock.h"
+#include "mocks/ConsoleMock.h"
+#include "mocks/TransactionRepositoryMock.h"
 
 using ::testing::Return;
 using ::testing::InSequence;
 
 TEST(PrintStatementFeature, print_statement_containing_all_transactions) {
-    auto myClock = new MockClock;
-    auto myConsole = new MockConsole;
+    auto myClock = new ClockMock;
+    auto myConsole = new ConsoleMock;
 
     EXPECT_CALL(*myClock, todayAsString())
             .WillOnce(Return("01/04/2019"))
             .WillOnce(Return("02/04/2019"))
             .WillOnce(Return("10/04/2019"));
 
-    auto accountService = new AccountService();
+    auto accountService = new AccountService;
 
     accountService->deposit(1000);
     accountService->withdraw(100);
@@ -36,4 +39,26 @@ TEST(PrintStatementFeature, print_statement_containing_all_transactions) {
     delete myClock;
     delete myConsole;
     delete accountService;
+}
+
+model::Transaction * transaction(const char *date, int amount) {
+    return new model::Transaction(date, amount);
+}
+
+TEST(AccountServiceShould, accept_a_deposit)
+{
+    auto myClock = new ClockMock;
+    ON_CALL(*myClock, todayAsString()).WillByDefault(Return("01/09/2019"));
+
+    auto accountService = new AccountService;
+
+    accountService->deposit(1000);
+
+    auto transactionRepository = new TransactionRepositoryMock;
+
+    EXPECT_CALL(*transactionRepository, add(transaction("01/09/2019", 1000))).Times(1);
+
+    delete myClock;
+    delete accountService;
+    delete transactionRepository;
 }

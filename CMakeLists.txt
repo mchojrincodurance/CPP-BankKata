@@ -10,10 +10,16 @@ add_executable(BankKata main.cpp
         infrastructure/Clock.h
         infrastructure/Console.cc
         infrastructure/Console.h
-        mocks/MockConsole.cc
-        mocks/MockConsole.h
-        mocks/MockClock.cc
-        mocks/MockClock.h)
+        mocks/ConsoleMock.cc
+        mocks/ConsoleMock.h
+        mocks/ClockMock.cc
+        mocks/ClockMock.h
+        infrastructure/TransactionRepository.cc
+        infrastructure/TransactionRepository.h
+        mocks/TransactionRepositoryMock.cc
+        mocks/TransactionRepositoryMock.h
+        model/Transaction.cc
+        model/Transaction.h)
 
 include(FetchContent)
 FetchContent_Declare(
