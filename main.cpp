@@ -15,6 +15,7 @@ using ::testing::Return;
 using ::testing::InSequence;
 using ::testing::Property;
 using ::testing::Eq;
+using ::testing::ElementsAre;
 
 model::Transaction *transaction(const char *date, int amount) {
     return new model::Transaction(date, amount);
@@ -142,7 +143,7 @@ TEST(StatementPrinterShould, always_print_the_header) {
 }
 
 TEST(StatementPrinterShould, print_transactions_in_reverse_chronological_order) {
-    auto *transactions = new std::forward_list<model::Transaction *> {
+    auto transactions = new std::forward_list<model::Transaction *> {
         transaction("01/04/2019", 1000),
         transaction("02/04/2019", -100),
         transaction("10/04/2019", 500),
@@ -162,4 +163,20 @@ TEST(StatementPrinterShould, print_transactions_in_reverse_chronological_order) 
 
     delete statementPrinter;
     delete console;
+}
+
+TEST(TransactionRepositoryShould, store_transactions) {
+    model::Transaction *deposit = transaction("01/04/2019", 1000);
+    model::Transaction *withdrawal = transaction("02/04/2019", -100);
+
+    const auto transactionRepository = new TransactionRepository;
+
+    transactionRepository->add(deposit);
+    transactionRepository->add(withdrawal);
+
+    auto actualTransactions = transactionRepository->all();
+
+    ASSERT_THAT(actualTransactions, ElementsAre(deposit, withdrawal));
+
+    delete transactionRepository;
 }
