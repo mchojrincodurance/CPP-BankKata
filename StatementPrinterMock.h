@@ -13,7 +13,7 @@ public:
     explicit StatementPrinterMock(const infrastructure::Console *console)
             : StatementPrinter(console) {
     }
-    MOCK_METHOD(void, print, (const std::forward_list<model::Transaction *> & transactions), (override));
+    MOCK_METHOD(void, print, (const std::vector<model::Transaction *> & transactions), (override));
 };
 
 

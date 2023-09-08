@@ -35,13 +35,12 @@ TEST(PrintStatementFeature, print_statement_containing_all_transactions) {
             .WillOnce(Return("02/04/2019"))
             .WillOnce(Return("10/04/2019"));
 
-    auto accountService = new AccountService(myTransactionRepository, nullptr, nullptr);
+    const auto statementPrinter = new StatementPrinter(myConsole);
+    auto accountService = new AccountService(myTransactionRepository, myClock, statementPrinter);
 
     accountService->deposit(1000);
     accountService->withdraw(100);
     accountService->deposit(500);
-
-    accountService->printStatement();
 
     InSequence inSequence;
     EXPECT_CALL(*myConsole, printLine("DATE | AMOUNT | BALANCE")).Times(1);
@@ -49,10 +48,13 @@ TEST(PrintStatementFeature, print_statement_containing_all_transactions) {
     EXPECT_CALL(*myConsole, printLine("02/04/2019 | -100.00 | 900.00")).Times(1);
     EXPECT_CALL(*myConsole, printLine("01/04/2019 | 1000.00 | 1000.00")).Times(1);
 
+    accountService->printStatement();
+
     delete myClock;
     delete myConsole;
     delete accountService;
     delete myTransactionRepository;
+    delete statementPrinter;
 }
 
 TEST(AccountServiceShould, accept_a_deposit) {
@@ -101,7 +103,7 @@ TEST(AccountServiceShould, accept_a_withdrawal) {
 
 TEST(AccountServiceShould, print_a_statement_containing_all_transactions) {
     auto transactionRepository = new TransactionRepositoryMock;
-    auto transactionList = new std::forward_list<model::Transaction *>;
+    auto transactionList = new std::vector<model::Transaction *>;
     auto myConsole = new infrastructure::Console;
 
     auto statementPrinter = new StatementPrinterMock(myConsole);
@@ -131,7 +133,7 @@ TEST(AccountServiceShould, print_a_statement_containing_all_transactions) {
 TEST(StatementPrinterShould, always_print_the_header) {
     auto console = new ConsoleMock;
     auto statementPrinter = new StatementPrinter(console);
-    auto emptyTransactionList = new std::forward_list<model::Transaction *>;
+    auto emptyTransactionList = new std::vector<model::Transaction *>;
 
     EXPECT_CALL(*console, printLine(Eq("DATE | AMOUNT | BALANCE")));
 
@@ -143,7 +145,7 @@ TEST(StatementPrinterShould, always_print_the_header) {
 }
 
 TEST(StatementPrinterShould, print_transactions_in_reverse_chronological_order) {
-    auto transactions = new std::forward_list<model::Transaction *> {
+    auto transactions = new std::vector<model::Transaction *> {
         transaction("01/04/2019", 1000),
         transaction("02/04/2019", -100),
         transaction("10/04/2019", 500),

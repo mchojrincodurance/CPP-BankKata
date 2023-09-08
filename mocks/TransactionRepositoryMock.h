@@ -12,7 +12,7 @@
 class TransactionRepositoryMock : public TransactionRepository {
 public:
     MOCK_METHOD(void, add, (model::Transaction * transaction), (override));
-    MOCK_METHOD(std::forward_list<model::Transaction *>, all, (), (override));
+    MOCK_METHOD(std::vector<model::Transaction *>, all, (), (override));
 };
 
 

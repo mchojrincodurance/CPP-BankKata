@@ -5,7 +5,7 @@
 #ifndef BANKKATA_STATEMENTPRINTER_H
 #define BANKKATA_STATEMENTPRINTER_H
 
-#include <forward_list>
+#include <vector>
 #include "model/Transaction.h"
 #include "infrastructure/Console.h"
 
@@ -20,15 +20,15 @@ public:
 
     virtual ~StatementPrinter();
 
-    virtual void print(const std::forward_list<model::Transaction *> &transactions);
+    virtual void print(const std::vector<model::Transaction *> &transactions);
 
-    void printTransactionLists() const;
-
-    void printTransactionList(const std::forward_list<model::Transaction *> &transactions) const;
+    void printTransactionList(const std::vector<model::Transaction *> &transactions) const;
 
     std::string formatTransaction(model::Transaction *pTransaction, int runningBalance) const;
 
     std::string formatNumber(int number) const;
+
+    int getInitialBalance(const std::vector<model::Transaction *> &transactions) const;
 };
 
 

@@ -5,7 +5,7 @@
 #include "StatementPrinter.h"
 #include <string> // header file for string
 
-void StatementPrinter::print(const std::forward_list<model::Transaction *> &transactions) {
+void StatementPrinter::print(const std::vector<model::Transaction *> &transactions) {
     this->console->printLine(this->buildHeader());
     this->printTransactionList(transactions);
 }
@@ -20,22 +20,13 @@ StatementPrinter::StatementPrinter(const infrastructure::Console *console) {
     this->console = console;
 }
 
-void StatementPrinter::printTransactionLists() const {
-}
+void StatementPrinter::printTransactionList(const std::vector<model::Transaction *> &transactions) const {
+    int runningBalance = getInitialBalance(transactions);
 
-void StatementPrinter::printTransactionList(const std::forward_list<model::Transaction *> &transactions) const {
-    auto reverseTransactions = std::forward_list<model::Transaction *> {};
-
-    int runningBalance = 0;
-
-    for (auto it: transactions) {
-        reverseTransactions.push_front(it);
-        runningBalance += it->getAmount();
-    }
-
-    for (auto it: reverseTransactions) {
-        this->console->printLine(this->formatTransaction(it, runningBalance));
-        runningBalance -= it->getAmount();
+    for (auto it = transactions.rbegin(); it != transactions.rend(); it++) {
+        int currentTransactionAmount = (*it)->getAmount();
+        this->console->printLine(this->formatTransaction(*it, runningBalance));
+        runningBalance -= currentTransactionAmount;
     }
 }
 
@@ -53,4 +44,14 @@ std::string StatementPrinter::formatNumber(int number) const {
     std::sprintf(buffer, "%.2f", (float)number);
 
     return buffer;
+}
+
+int StatementPrinter::getInitialBalance(const std::vector<model::Transaction *> &transactions) const {
+    int result = 0;
+
+    for (auto it : transactions) {
+        result += (*it).getAmount();
+    }
+
+    return result;
 }
