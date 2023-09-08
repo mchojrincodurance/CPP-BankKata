@@ -9,6 +9,7 @@
 #include <gmock/gmock.h>
 
 class MockClock : public infrastructure::Clock {
+public:
     MOCK_METHOD(std::string, todayAsString, (), (override));
 };
 
