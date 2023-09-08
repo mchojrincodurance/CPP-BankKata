@@ -21,6 +21,14 @@ public:
     virtual ~StatementPrinter();
 
     virtual void print(const std::forward_list<model::Transaction *> &transactions);
+
+    void printTransactionLists() const;
+
+    void printTransactionList(const std::forward_list<model::Transaction *> &transactions) const;
+
+    std::string formatTransaction(model::Transaction *pTransaction, int runningBalance) const;
+
+    std::string formatNumber(int number) const;
 };
 
 
