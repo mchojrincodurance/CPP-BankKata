@@ -73,3 +73,25 @@ TEST(AccountServiceShould, accept_a_deposit) {
     delete accountService;
     delete transactionRepository;
 }
+
+TEST(AccountServiceShould, accept_a_withdrawal) {
+    auto myClock = new ClockMock;
+    ON_CALL(*myClock, todayAsString()).WillByDefault(Return("02/09/2019"));
+
+    auto transactionRepository = new TransactionRepositoryMock;
+    EXPECT_CALL(
+            *transactionRepository,
+            add(
+                    IsTransactionEquivalent(transaction("02/09/2019", -500))
+            )
+    )
+            .Times(1);
+
+    auto accountService = new AccountService(transactionRepository, myClock);
+
+    accountService->deposit(500);
+
+    delete myClock;
+    delete accountService;
+    delete transactionRepository;
+}
