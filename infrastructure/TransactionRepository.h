@@ -9,9 +9,13 @@
 #include "../model/Transaction.h"
 
 class TransactionRepository {
+private:
+    std::forward_list<model::Transaction *> transactions;
+
 public:
     virtual ~TransactionRepository();
-    virtual void add(const model::Transaction *transaction);
+    virtual void add(model::Transaction *transaction);
+
     virtual std::forward_list<model::Transaction *> all();
 };
 
