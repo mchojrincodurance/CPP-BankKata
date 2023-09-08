@@ -6,12 +6,11 @@
 #include "model/Transaction.h"
 
 void AccountService::deposit(int amount) {
-    auto * transaction = new model::Transaction(this->todayAsString(), amount);
-    this->addTransaction(transaction);
+    this->addTransaction(new model::Transaction(this->todayAsString(), amount));
 }
 
 void AccountService::withdraw(int amount) {
-
+    this->addTransaction(new model::Transaction(this->todayAsString(), amount * -1));
 }
 
 void AccountService::printStatement() {
