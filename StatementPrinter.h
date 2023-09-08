@@ -12,7 +12,7 @@
 class StatementPrinter {
 public:
     virtual ~StatementPrinter();
-    virtual void print(const std::forward_list<model::Transaction *> *transactions);
+    virtual void print(const std::forward_list<model::Transaction *> &transactions);
 };
 
 

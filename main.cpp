@@ -34,7 +34,7 @@ TEST(PrintStatementFeature, print_statement_containing_all_transactions) {
             .WillOnce(Return("02/04/2019"))
             .WillOnce(Return("10/04/2019"));
 
-    auto accountService = new AccountService(myTransactionRepository, nullptr);
+    auto accountService = new AccountService(myTransactionRepository, nullptr, nullptr);
 
     accountService->deposit(1000);
     accountService->withdraw(100);
@@ -67,7 +67,7 @@ TEST(AccountServiceShould, accept_a_deposit) {
     )
             .Times(1);
 
-    auto accountService = new AccountService(transactionRepository, myClock);
+    auto accountService = new AccountService(transactionRepository, myClock, nullptr);
 
     accountService->deposit(1000);
 
@@ -89,7 +89,7 @@ TEST(AccountServiceShould, accept_a_withdrawal) {
     )
             .Times(1);
 
-    auto accountService = new AccountService(transactionRepository, myClock);
+    auto accountService = new AccountService(transactionRepository, myClock, nullptr);
 
     accountService->withdraw(500);
 
@@ -113,9 +113,9 @@ TEST(AccountServiceShould, print_a_statement_containing_all_transactions) {
 
     Clock *myClock = new Clock;
 
-    auto accountService = new AccountService(transactionRepository, myClock);
+    auto accountService = new AccountService(transactionRepository, myClock, statementPrinter);
 
-    EXPECT_CALL(*statementPrinter, print(Eq(transactionList)));
+    EXPECT_CALL(*statementPrinter, print(Eq(*transactionList)));
 
     accountService->printStatement();
 

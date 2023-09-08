@@ -14,12 +14,17 @@ void AccountService::withdraw(int amount) {
 }
 
 void AccountService::printStatement() {
-
+    this
+    ->statementPrinter
+    ->print(this->transactionRepository->all())
+    ;
 }
 
-AccountService::AccountService(TransactionRepository *transactionRepository, infrastructure::Clock *clock) {
+AccountService::AccountService(TransactionRepository *transactionRepository, infrastructure::Clock *clock,
+                               StatementPrinter *statementPrinter) {
     this->transactionRepository = transactionRepository;
     this->clock = clock;
+    this->statementPrinter = statementPrinter;
 }
 
 std::string AccountService::todayAsString() {

@@ -10,7 +10,7 @@
 
 class StatementPrinterMock : public StatementPrinter {
 public:
-    MOCK_METHOD(void, print, (const std::forward_list<model::Transaction *> * transactions), (override));
+    MOCK_METHOD(void, print, (const std::forward_list<model::Transaction *> & transactions), (override));
 };
 
 
