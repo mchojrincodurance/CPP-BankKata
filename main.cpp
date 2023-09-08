@@ -140,3 +140,26 @@ TEST(StatementPrinterShould, always_print_the_header) {
     delete console;
     delete emptyTransactionList;
 }
+
+TEST(StatementPrinterShould, print_transactions_in_reverse_chronological_order) {
+    auto *transactions = new std::forward_list<model::Transaction *> {
+        transaction("01/04/2019", 1000),
+        transaction("02/04/2019", -100),
+        transaction("10/04/2019", 500),
+    };
+
+    auto console = new ConsoleMock;
+    auto statementPrinter = new StatementPrinter(console);
+
+    InSequence inSequence;
+
+    EXPECT_CALL(*console, printLine(Eq("DATE | AMOUNT | BALANCE")));
+    EXPECT_CALL(*console, printLine(Eq("10/04/2019 | 500.00 | 1400.00")));
+    EXPECT_CALL(*console, printLine(Eq("02/04/2019 | -100.00 | 900.00")));
+    EXPECT_CALL(*console, printLine(Eq("01/04/2019 | 1000.00 | 1000.00")));
+
+    statementPrinter->print(*transactions);
+
+    delete statementPrinter;
+    delete console;
+}
